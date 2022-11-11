@@ -3,3 +3,9 @@
 {{outlet}}
 
 <Test @wow={{and 'test' false 'cool'}} />
+
+<Test @wow={{not true}} />
+
+{{#if (not true)}}
+  {{! test }}
+{{/if}}
