@@ -1,9 +1,7 @@
 import Helper from '@ember/component/helper';
 
-import { Falsy } from '../-private/shared';
+import { Falsy, TruthArray, Truthy } from '../-private/shared';
 
-type Truthy<T> = T extends Falsy ? never : T;
-type TruthArray<T extends unknown[]> = [...Truthy<T>];
 const isTruthy = <T>(x: T | Falsy): x is T =>
   x !== false &&
   x !== 0 &&
