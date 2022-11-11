@@ -1,40 +1,64 @@
-import Helper, { helper } from '@ember/component/helper';
+import Helper from '@ember/component/helper';
 
-import { Falsy, Maybe, UnsetValue } from '../-private/shared';
-import truthConvert from '../utils/truthy';
+import { Falsy } from '../-private/shared';
 
-type AndPair<A, B> = Falsy<A> extends true
-  ? A
-  : B extends UnsetValue
-  ? A
-  : A | B;
+type Truthy<T> = T extends Falsy ? never : T;
+type TruthArray<T extends unknown[]> = [...Truthy<T>];
+const isTruthy = <T>(x: T | Falsy): x is T =>
+  x !== false &&
+  x !== 0 &&
+  x !== '' &&
+  x !== null &&
+  x !== undefined &&
+  Array.isArray(x) &&
+  x.length > 0;
 
-type AllTrue<T extends unknown[]> = T extends [infer A, ...infer R]
-  ? AndPair<A, AllTrue<R>>
-  : never;
-type FirstFalse<T extends unknown[]> = T extends [infer A, ...infer R]
-  ? AndPair<A, FirstFalse<R>>
+const firstFalsy = <T extends unknown[]>(x: T[number]) =>
+  !isTruthy(x) ? x : undefined;
+
+function isAllTruthy<T extends unknown[]>(
+  value: [...T]
+): value is [...Truthy<T>] {
+  return value.every(isTruthy);
+}
+
+type FirstFalsy<T extends unknown[]> = T extends [infer Head, ...infer Tail]
+  ? Head extends Falsy
+    ? Head
+    : FirstFalsy<Tail>
   : never;
 
 type Last<T extends unknown[]> = T extends [...infer _, infer L] ? L : never;
 
+type AndHelperReturn<T extends unknown[]> = T extends [
+  ...infer Head,
+  infer Tail extends Last<T>
+]
+  ? [...Head, Tail] extends TruthArray<T>
+    ? Tail
+    : FirstFalsy<[...Head, Tail]>
+  : never;
+
 interface AndHelperSignature<T extends unknown[]> {
-  Args: { Positional: [...T]; Named: unknown };
-  Return: AllTrue<T> extends never ? FirstFalse<T> : Last<T>;
+  Args: { Positional: [...T] };
+  Return: AndHelperReturn<T>;
 }
 
 export default class AndHelper<T extends unknown[]> extends Helper<
   AndHelperSignature<T>
 > {
-  public compute(
-    positional: [...T],
-    named: unknown
-  ): AllTrue<T> extends never ? FirstFalse<T> : Last<T> {
-    for (let i = 0, len = positional.length; i < len; i++) {
-      if (truthConvert(positional[i]) === false) {
-        return positional[i] as FirstFalse<T>;
-      }
+  public compute(positional: [...T]): AndHelperReturn<T> {
+    if (positional.length < 2) {
+      throw new Error('The `and` helper requires at least two arguments');
     }
-    return positional[positional.length - 1] as Last<T>;
+    const isAllTruth = isAllTruthy(positional);
+    if (isAllTruth) {
+      const last = positional[positional.length - 1];
+      return last as AndHelperReturn<T>;
+    } else {
+      const index = positional.findIndex(firstFalsy);
+      const test = positional[index] as FirstFalsy<T>;
+      return test;
+    }
   }
 }
