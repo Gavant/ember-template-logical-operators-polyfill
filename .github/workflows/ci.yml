@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   test:
-    name: "Tests"
+    name: 'Tests'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -25,14 +25,14 @@ jobs:
           node-version: 14.x
           cache: npm
       - name: Install Dependencies
-        run: npm ci
+        run: yarn install --non-interactive --frozen-lockfile
       - name: Lint
-        run: npm run lint
+        run: yarn lint
       - name: Run Tests
-        run: npm run test:ember
+        run: yarn test:ember
 
   floating:
-    name: "Floating Dependencies"
+    name: 'Floating Dependencies'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -43,14 +43,14 @@ jobs:
           node-version: 14.x
           cache: npm
       - name: Install Dependencies
-        run: npm install --no-shrinkwrap
+        run: yarn install
       - name: Run Tests
-        run: npm run test:ember
+        run: yarn test:ember
 
   try-scenarios:
     name: ${{ matrix.try-scenario }}
     runs-on: ubuntu-latest
-    needs: "test"
+    needs: 'test'
     timeout-minutes: 10
 
     strategy:
@@ -74,6 +74,6 @@ jobs:
           node-version: 14.x
           cache: npm
       - name: Install Dependencies
-        run: npm ci
+        run: yarn install --non-interactive --frozen-lockfile
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
