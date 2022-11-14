@@ -1,6 +1,6 @@
 # ember-template-logical-operators-polyfill
 
-[Short description of the addon.]
+https://rfcs.emberjs.com/id/0562-add-logical-operators/
 
 
 ## Compatibility
@@ -19,7 +19,7 @@ ember install ember-template-logical-operators-polyfill
 
 ## Usage
 
-[Longer description of how to use the addon in apps.]
+https://rfcs.emberjs.com/id/0562-add-logical-operators/
 
 
 ## Contributing
