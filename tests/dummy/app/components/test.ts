@@ -5,4 +5,8 @@ interface TestSignature {
     wow: string;
   };
 }
-export default class TestComponent extends Component<TestSignature> {}
+export default class TestComponent extends Component<TestSignature> {
+  public get wow() {
+    return this.args.wow;
+  }
+}

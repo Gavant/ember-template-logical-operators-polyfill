@@ -1,8 +1,6 @@
 import Helper from '@ember/component/helper';
 
-import { firstFalsy, firstTruthy, isFalsy } from 'ember-template-logical-operators-polyfill/utils/shared';
-
-import { FirstTruthy, Last } from '../-private/shared';
+import { firstTruthy } from 'ember-template-logical-operators-polyfill/utils/shared';
 
 interface OrHelperSignature<T extends unknown[]> {
   Args: { Positional: [...T] };
@@ -19,15 +17,14 @@ interface OrHelperSignature<T extends unknown[]> {
  * @extends {Helper<OrHelperSignature<T>>}
  * @template T
  */
-export default class OrHelper<T extends unknown[]> extends Helper<
-  OrHelperSignature<T>
-> {
+export default class OrHelper<T extends unknown[]> extends Helper<OrHelperSignature<T>> {
   public compute(positional: [...T]): T[number] {
     if (positional.length < 2) {
       throw new Error('The `or` helper requires at least two arguments');
     }
 
     const firstTruthyValue = firstTruthy(positional);
+
     if (firstTruthyValue) {
       return firstTruthyValue;
     } else {

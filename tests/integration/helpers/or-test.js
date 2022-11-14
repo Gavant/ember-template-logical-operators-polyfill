@@ -1,12 +1,14 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'dummy/tests/helpers';
-import { render, setupOnerror, resetOnerror } from '@ember/test-helpers';
+import { render, resetOnerror, setupOnerror } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+
+import { setupRenderingTest } from 'dummy/tests/helpers';
 
 module('Integration | Helper | or', function (hooks) {
   setupRenderingTest(hooks);
 
   test('Failure if 1 arg passed in', async function (assert) {
+    assert.expect(1);
     setupOnerror(function (err) {
       assert.ok(err);
     });
@@ -37,9 +39,7 @@ module('Integration | Helper | or', function (hooks) {
     this.set('fifth', undefined);
     this.set('sixth', []);
 
-    await render(
-      hbs`{{or this.first this.second this.third this.fourth this.fifth this.sixth}}`
-    );
+    await render(hbs`{{or this.first this.second this.third this.fourth this.fifth this.sixth}}`);
 
     // Apparently when the value is `[]` it returns an empty string
     assert.dom(this.element).hasText('');

@@ -17,19 +17,19 @@ interface AndHelperSignature<T extends unknown[]> {
  * @extends {Helper<AndHelperSignature<T>>}
  * @template T
  */
-export default class AndHelper<T extends unknown[]> extends Helper<
-  AndHelperSignature<T>
-> {
+export default class AndHelper<T extends unknown[]> extends Helper<AndHelperSignature<T>> {
   public compute(positional: [...T]): T[number] {
     if (positional.length < 2) {
       throw new Error('The `and` helper requires at least two arguments');
     }
 
     const isAllTruthy = this.allArgsTruthy(positional);
+
     if (isAllTruthy) {
       return positional[positional.length - 1];
     } else {
       const first: T[number] = firstFalsy(positional);
+
       return first;
     }
   }

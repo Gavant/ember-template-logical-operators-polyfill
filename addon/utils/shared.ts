@@ -1,4 +1,4 @@
-import { Falsy } from 'ember-template-logical-operators-polyfill/-private/shared';
+import type { Falsy } from 'ember-template-logical-operators-polyfill/-private/shared';
 
 export const isTruthy = <T>(x: T | Falsy) =>
   Array.isArray(x)

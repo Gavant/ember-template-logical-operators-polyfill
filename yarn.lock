@@ -4849,7 +4849,7 @@ eslint-module-utils@^2.7.3:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-decorator-position@5.0.1:
+eslint-plugin-decorator-position@5.0.1, eslint-plugin-decorator-position@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-decorator-position/-/eslint-plugin-decorator-position-5.0.1.tgz#17cfe02d60b86bbcf8d70c24b119849ef9ca7f07"
   integrity sha512-2VI4qzKhdIvWR/+VIsIcUQLVS49E5/LNOKHccV+di23IqeY0JRTefjSAuHpsEjF/KTEciH2LVsxFltgV1/kw2w==
