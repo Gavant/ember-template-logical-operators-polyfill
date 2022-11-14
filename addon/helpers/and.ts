@@ -2,32 +2,35 @@ import Helper from '@ember/component/helper';
 
 import { firstFalsy, isTruthy } from 'ember-template-logical-operators-polyfill/utils/shared';
 
-import { FirstFalsy, Last } from '../-private/shared';
-
-type AndOperatorHelperReturn<T extends unknown[]> = FirstFalsy<T> extends never
-  ? Last<T>
-  : FirstFalsy<T>;
-
 interface AndHelperSignature<T extends unknown[]> {
   Args: { Positional: [...T] };
-  Return: AndOperatorHelperReturn<T>;
+  Return: T[number];
 }
 
+/**
+ * Takes at least two positional arguments. Raises an error if invoked with less than two arguments.
+ * It evaluates arguments left to right, returning the first one that is not truthy (by handlebar's definition of truthiness) or the right-most arguments if all evaluate to truthy.
+ * This is NOT equivalent to the {{and}} helper from ember-truth-helpers because unlike this proposed helper, the one in ember-truth-helpers uses Javascript's definition of truthiness.
+ *
+ * @export
+ * @class AndHelper
+ * @extends {Helper<AndHelperSignature<T>>}
+ * @template T
+ */
 export default class AndHelper<T extends unknown[]> extends Helper<
   AndHelperSignature<T>
 > {
-  public compute(positional: [...T]): AndOperatorHelperReturn<T> {
+  public compute(positional: [...T]): T[number] {
     if (positional.length < 2) {
       throw new Error('The `and` helper requires at least two arguments');
     }
+
     const isAllTruthy = this.allArgsTruthy(positional);
     if (isAllTruthy) {
-      const last = positional[positional.length - 1] as Last<T>;
-      return last;
+      return positional[positional.length - 1];
     } else {
-      const index = positional.findIndex(firstFalsy);
-      const test = positional[index] as FirstFalsy<T>;
-      return test;
+      const first: T[number] = firstFalsy(positional);
+      return first;
     }
   }
 
