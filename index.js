@@ -7,7 +7,7 @@ const MINIMUM_VERSION = '5.0.0';
 module.exports = {
   name: require('./package').name,
 
-  _usePolyfill: flag(process.env.USE_DEFAULT_HELPER_MANAGER_POLYFILL),
+  _usePolyfill: flag(process.env.USE_TEMPLATE_LOGICAL_OPERATORS_POLYFILL),
 
   options: {
     'ember-cli-babel': {
